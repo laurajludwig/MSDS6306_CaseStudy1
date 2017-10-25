@@ -7,9 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-load("merged.data")
-load("gdp.data")
-load("edstats.data")
+
 ```
 
 ## Introduction
@@ -18,11 +16,10 @@ This is where we will write an introduction to the problem and analysis we are c
 
 ## Data cleaning
 
-In this section, we will need to present code that we use to gather and merge the two data sets (so Professor Woo can see it). We also need to include several text sentences before or after the code chunk to explain what is being done. 
+In order to complete our analysis, several data sets are needed. These are gathered from two locations online, and then need to be cleaned and merged in order to be useable in the analysis. 
 
-Reminder, code chunks are like this:
+The first data set relates to GDP data for many countries. The key in this data is a three-character country code, and the resulting output data includes this code, the GDP in US dollars, and the GDP ranking. This data set also included some summary measurements about regional statistics, which were excluded for the purpose of this analysis.
 
-Clean GDP
 ```{r cleanGDP}
 library(readr)
 library(tidyr)
@@ -30,6 +27,7 @@ library(plyr)
 library(dplyr)
 library(stringr)
 
+# Read in and store data from csv file
 gdp <- read.csv("GDP.csv", skip = 3)
 # Remove extraneous columns
 gdp[c(3,6:10)] <- NULL
@@ -37,20 +35,24 @@ names(gdp)[c(1, 4)] <- c("CountryCode", "US.dollars")
 # Remove Blank Rows
 gdp <- gdp[-which(gdp$CountryCode==""),]
 
+# Remove the comma formatting so a double is stored 
 gdp$US.dollars <- gsub(",", "", gdp$US.dollars)
-  ## ".." in the US Dollars column represents not available. as.Numeric automatically converts these to NA
+
+# ".." in the US Dollars column represents not available. as.Numeric automatically converts these to NA
 gdp$US.dollars <- as.numeric(as.character(gdp$US.dollars))
 gdp$Ranking <- as.numeric(as.character(gdp$Ranking))
 
-# Data for the Regions
+# Segregate data for the Regions
 gdp.stats <- gdp[which(is.na(gdp$Ranking) & !is.na(gdp$US.dollars)),]
-# Data For each country
+# Segregate data For each country
 gdp <- gdp[-which(is.na(gdp$Ranking) & !is.na(gdp$US.dollars)),]
 
+#save a file that includes the ouput of the above code
 save(gdp, gdp.stats, file = "gdp.data")
 ```
 
-Clean EDSTATS
+The second data set relates to income to many countries. The key in this data is the same three-character country code as the first data set. The resulting output data includes this code, the country name and the income group. The Income group was codified as it was brought in, and the data set was saved for further use.
+
 
 ```{r cleanEDSTATS}
 edstats <- read.csv("EDSTATS.csv", stringsAsFactors = FALSE)
@@ -76,40 +78,48 @@ save(edstats, file = "edstats.data")
 sum(is.na(gdp$US.dollars))
 sum(is.na(gdp$Ranking))
 ```
-We will need to provide code addressing each question that is outlined in the assignment: 
+ 
 
 1. Merge the data based on the country shortcode. How many of the IDs match? 
-Insert code chunk, followed by answer here.
+
 ```{r question1}
 # Merge the data
 merged <- merge(gdp, edstats, by = "CountryCode")
+```
 
-# Number of common Country Codes
+
+The number of common country codes (matching IDs) is 
+```{r q1answer} 
 length(intersect(gdp$CountryCode, edstats$CountryCode))
 ```
 
 
 2. Sort the data frame in ascending order by GDP (so United States is last). What is the 13th country in the resulting data frame?
-Insert code chunk, followed by answer here.
+
 ``` {r question2}
 # Sort Merged data by GDP and retrieve 13th row
 merged.sortGDP <- merged[order(merged$US.dollars),]
+```
+The country with the 13th smallest GDP is 
+```{r q2answer} 
 merged.sortGDP[13,]
 ```
 
 3. What are the average GDP rankings for the "High income: OECD" and "High income: nonOECD" groups? 
-Insert code chunk, followed by answer here.
-``` {r question3}
+
+The average GDP ranking for "High income: OECD" is
+``` {r q3answer1}
 # Get the Average GDP for High Income OECD
 mean(merged$US.dollars[which(merged$Income.Group=="HI_OECD")])
-
+```
+The average GDP ranking for "High income: nonOECD" is
+``` {r q3answer2}
 # Get the Average GDP for High Income nonOECD
 mean(merged$US.dollars[which(merged$Income.Group=="HI_nonOECD")], na.rm = TRUE)
 ```
 
-4. Plot the GDP for all of the countries. Use ggplot2 to color your plot by Income Group.
-Insert code chunk, followed by answer here.
-
+4. Plot the GDP for all of the countries. 
+Below is a plot showing the GDP for all countries, with colors coded to the Income Group.
 ``` {r question4}
 library(ggplot2)
 # Plot GDP for all the countries, color-coded by income group
@@ -117,7 +127,6 @@ ggplot(merged, aes(x =CountryCode, y = US.dollars, color=Income.Group)) +geom_po
 ```
 
 5. Cut the GDP ranking into 5 separate quantile groups. Make a table versus Income.Group. How many countries are Lower middle income but among the 38 nations with highest GDP?
-Insert code chunk, followed by answer here.
 
 ```{r question5}
 # Cut the GDP Ranking into 5 separate quantile groups
@@ -128,10 +137,12 @@ for(i in 1:5){
 
 # Make a table versus Income.Group.
 ccIncomeGroupTable <- with(quantiles[[1]], table(CountryCode, Income.Group))
-
+```
+```{r q5answer}
 # How many countries are in the Lower Middle Income, but in the top 38 nations with highest GDP?
 sum(quantiles[[5]]$Income.Group=="LMI")
 ```
+are in the Lower Middle Income, but in the top 38 nations with highest GDP
 
 ## Conclusion
 Here we will need to tie together the results from our analysis.
