@@ -8,6 +8,9 @@ load("edstats.data")
 sum(is.na(gdp$US.dollars))
 sum(is.na(gdp$Ranking))
 
+# Number of common Country Codes
+length(intersect(gdp$CountryCode, edstats$CountryCode))
+
 # Sort Merged data by GDP and retrieve 13th row
 merged.sortGDP <- merged[order(merged$US.dollars),]
 merged.sortGDP[13,]
