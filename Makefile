@@ -1,7 +1,7 @@
-all: loaddata 
+all: report.html 
 #report.html
 clean:
-	rm -f GDP.csv EDSTATS.csv
+	rm -f GDP.csv EDSTATS.csv gdp.data edstats.data Report.html
 	#report.html
 
 #We will need to add functions in here, as modular as possible, that 
@@ -10,18 +10,19 @@ clean:
 #will then be referenced in the Report.Rmd file for creating the final 
 #report. 
 
-report.html: Report.Rmd 
-	Rscript -e 'rmarkdown::render("$<")'
-
 loaddata:
 	Rscript -e 'download.file("https://d396qusza40orc.cloudfront.net/getdata/data/GDP.csv", destfile = "GDP.csv", method="curl", quiet = TRUE)'
 	Rscript -e 'download.file("https://d396qusza40orc.cloudfront.net/getdata/data/EDSTATS_Country.csv", destfile = "EDSTATS.csv", method="curl", quiet = TRUE)'
 
-cleandata:
-	Rscript 'GDP.r'
+cleandata: 
+	Rscript 'GDP.R'
+	Rscript 'EDSTATS.R'
 	
-mergedata:
- Rscript -e 'merged <- merge(gdp, edstats, by = "CountryCode")'
+mergedata: Merge.R loaddata cleandata
+	Rscript '$<'
  
-analysis:
-	Rscript 'Analysis.R'	
+analysis: Analysis.R mergedata
+	Rscript '$<'	
+
+report.html: Report.Rmd analysis
+	Rscript -e 'rmarkdown::render("$<")'

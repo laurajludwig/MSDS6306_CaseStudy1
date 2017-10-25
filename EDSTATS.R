@@ -3,6 +3,7 @@
 #----------
 library(readr)
 library(tidyr)
+library(plyr)
 library(dplyr)
 library(stringr)
 
@@ -21,3 +22,4 @@ edstats$Income.Group <- revalue(edstats$Income.Group, c("Low income" = "LI",
                                                         "Upper middle income" = "UMI", 
                                                         "High income: OECD" = "HI_OECD"))
 
+save(edstats, file = "edstats.data")

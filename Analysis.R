@@ -1,5 +1,13 @@
 library(ggplot2)
 
+load("merged.data")
+load("gdp.data")
+load("edstats.data")
+
+#Number of NA's for GDP:
+sum(is.na(gdp$US.dollars))
+sum(is.na(gdp$Ranking))
+
 # Sort Merged data by GDP and retrieve 13th row
 merged.sortGDP <- merged[order(merged$US.dollars),]
 merged.sortGDP[13,]

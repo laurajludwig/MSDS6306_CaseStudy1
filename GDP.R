@@ -22,6 +22,13 @@ gdp$US.dollars <- gsub(",", "", gdp$US.dollars)
 gdp$US.dollars <- as.numeric(as.character(gdp$US.dollars))
 gdp$Ranking <- as.numeric(as.character(gdp$Ranking))
 
+# Include code For NA count
+
+
+# Data for the Regions
 gdp.stats <- gdp[which(is.na(gdp$Ranking) & !is.na(gdp$US.dollars)),]
+# Data For each country
 gdp <- gdp[-which(is.na(gdp$Ranking) & !is.na(gdp$US.dollars)),]
+
+save(gdp, gdp.stats, file = "gdp.data")
 
