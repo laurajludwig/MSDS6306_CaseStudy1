@@ -12,7 +12,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-This is where we will write an introduction to the problem and analysis we are completing.
+The World Bank's Open Data initiative is inteded to provide all users with access to World Bank Data.  
+Gross Domestic Product (GDP) is the single most commonly referenced figure to cover the entirety of a national economy 
+and the trajectory it is on in a single statistic.
+
+The World Bank Education Statistics  is the comprehensive data and analysis source for key topics in education such as Income grup, region, latest population census.
+The Organization for Economic Cooperation and Development (OECD) is a unique forum where the governments of 34 democracies with market economies work with each other to promote economic growth, prosperity and development.  
+The income groups are categorized based on High income with OECD or Non-OECD, lower / updder middle income and low income.
+
+
+The goal of this case study is to understand the relationship between GDP and the education income groups.  
+Does countries with high GDP have low income groups (with / without OECD) or vice versa.
 
 ## Data cleaning
 
