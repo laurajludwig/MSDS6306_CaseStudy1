@@ -16,9 +16,9 @@ The World Bank's Open Data initiative is inteded to provide all users with acces
 Gross Domestic Product (GDP) is the single most commonly referenced figure to cover the entirety of a national economy 
 and the trajectory it is on in a single statistic.
 
-The World Bank Education Statistics  is the comprehensive data and analysis source for key topics in education such as Income grup, region, latest population census.
+The World Bank Education Statistics is the comprehensive data and analysis source for key topics in education such as Income group, region, latest population census.
 The Organization for Economic Cooperation and Development (OECD) is a unique forum where the governments of 34 democracies with market economies work with each other to promote economic growth, prosperity and development.  
-The income groups are categorized based on High income with OECD or Non-OECD, lower / updder middle income and low income.
+The income groups are categorized based on High income with OECD or Non-OECD, lower / upper middle income and low income.
 
 
 The goal of this case study is to understand the relationship between GDP and the education income groups.  
@@ -155,6 +155,7 @@ sum(quantiles[[5]]$Income.Group=="LMI")
 are in the Lower Middle Income, but in the top 38 nations with highest GDP
 
 ## Conclusion
-Here we will need to tie together the results from our analysis.
+With the data gathered by the World Bank’s Open Data Initiative we can view correlations between countries’ GDP and educational statistics, by parsing, cleaning, and creating visual aids pertaining countries’ GDP and educational statistics. Utilizing the data gathered by the World Bank, we are able to clean and sort data, as well as extrapolate information to address questions of interest. 
 
+For the GDP data set we take the three-character country code, GDP in dollars, and the GDP ranking, and for the educational data set we use he three-character country code, country’s name and income group. Utilizing the two data sets, and the R packages tools we are able to create graphs, and view correlations between countries, GDP, and education.
 
